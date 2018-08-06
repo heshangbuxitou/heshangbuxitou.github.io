@@ -90,7 +90,7 @@
 
 
 
-  <meta name="keywords" content="网络,子网掩码," />
+  <meta name="keywords" content="curio,concurrent," />
 
 
 
@@ -101,18 +101,18 @@
 
 
 
-<meta name="description" content="前言在因特网中，计算机与计算机之间的通信都是通过网络来完成的，那么他们直接是如何完成通信的呢？大多数人都知道，计算机通信使用的是当前最流行的Internet分组交换传输协议，即TCP/IP的协议簇或者它的的变种。 在使用TCP/IP进行通信的时候，我们经常会使用到网段和子网掩码，子网掩码用来区分IP地址的网络地址和主机地址，相同网络号地址的IP发包情况是不同的。同一个网络发包可以通过相关的协议把数">
-<meta name="keywords" content="网络,子网掩码">
+<meta name="description" content="为什么使用协程C10K问题在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。 当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动">
+<meta name="keywords" content="curio,concurrent">
 <meta property="og:type" content="article">
-<meta property="og:title" content="子网掩码详解">
-<meta property="og:url" content="https://heshangbuxitou.github.io/2018/03/19/子网掩码详解/index.html">
+<meta property="og:title" content="使用python进行异步编程 -- curio使用指南（一）">
+<meta property="og:url" content="https://heshangbuxitou.github.io/2017/11/03/curio-usr-guide/index.html">
 <meta property="og:site_name" content="SiYuYong&#39;s Blog">
-<meta property="og:description" content="前言在因特网中，计算机与计算机之间的通信都是通过网络来完成的，那么他们直接是如何完成通信的呢？大多数人都知道，计算机通信使用的是当前最流行的Internet分组交换传输协议，即TCP/IP的协议簇或者它的的变种。 在使用TCP/IP进行通信的时候，我们经常会使用到网段和子网掩码，子网掩码用来区分IP地址的网络地址和主机地址，相同网络号地址的IP发包情况是不同的。同一个网络发包可以通过相关的协议把数">
+<meta property="og:description" content="为什么使用协程C10K问题在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。 当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-22T07:01:57.151Z">
+<meta property="og:updated_time" content="2017-11-05T03:27:00.038Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="子网掩码详解">
-<meta name="twitter:description" content="前言在因特网中，计算机与计算机之间的通信都是通过网络来完成的，那么他们直接是如何完成通信的呢？大多数人都知道，计算机通信使用的是当前最流行的Internet分组交换传输协议，即TCP/IP的协议簇或者它的的变种。 在使用TCP/IP进行通信的时候，我们经常会使用到网段和子网掩码，子网掩码用来区分IP地址的网络地址和主机地址，相同网络号地址的IP发包情况是不同的。同一个网络发包可以通过相关的协议把数">
+<meta name="twitter:title" content="使用python进行异步编程 -- curio使用指南（一）">
+<meta name="twitter:description" content="为什么使用协程C10K问题在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。 当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动">
 
 
 
@@ -142,7 +142,7 @@
 
 
 
-  <link rel="canonical" href="https://heshangbuxitou.github.io/2018/03/19/子网掩码详解/"/>
+  <link rel="canonical" href="https://heshangbuxitou.github.io/2017/11/03/curio-usr-guide/"/>
 
 
 
@@ -151,7 +151,7 @@
 <meta name="google-site-verification" content="3CjstPVfqGKNYOswM2Dl407aZWDTievG6ytMf7zpXZI" />
 <meta name="baidu-site-verification" content="KPNc5qApqS" />
 
-  <title>子网掩码详解 | SiYuYong's Blog</title>
+  <title>使用python进行异步编程 -- curio使用指南（一） | SiYuYong's Blog</title>
   
 
 
@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2018/03/19/子网掩码详解/">
+    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2017/11/03/curio-usr-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SiYuYong">
@@ -295,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">子网掩码详解</h1>
+          <h1 class="post-title" itemprop="name headline">使用python进行异步编程 -- curio使用指南（一）</h1>
         
 
         <div class="post-meta">
@@ -307,8 +307,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T20:18:42+08:00">
-                2018-03-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T21:55:58+08:00">
+                2017-11-03
               </time>
             
 
@@ -332,8 +332,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TCP-IP/" itemprop="url" rel="index">
-                    <span itemprop="name">TCP/IP</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -375,30 +375,26 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在因特网中，计算机与计算机之间的通信都是通过网络来完成的，那么他们直接是如何完成通信的呢？大多数人都知道，计算机通信使用的是当前最流行的Internet分组交换传输协议，即TCP/IP的协议簇或者它的的变种。</p>
-<p>在使用TCP/IP进行通信的时候，我们经常会使用到网段和子网掩码，子网掩码用来区分IP地址的<strong>网络地址</strong>和<strong>主机地址</strong>，相同网络号地址的IP发包情况是不同的。同一个网络发包可以通过相关的协议把数据包直接发送到目标主机，而不同网络的则会通过路由器发包。划分一个合适的子网是重要的，过少的主机数目可能无法满足你的要求，而过多的主机数目无疑会导致局域网访问量过大，频繁，会影响通信效率。</p>
-<h1 id="IP网段"><a href="#IP网段" class="headerlink" title="IP网段"></a>IP网段</h1><p>通常IP网段分为四种：</p>
-<ol>
-<li>A类IP段 <code>0.0.0.0</code> 到 <code>127.255.255.255</code> 即首位为‘<code>0</code>’的IP地址。</li>
-<li>B类IP段 <code>128.0.0.0</code> 到 <code>191.255.255.255</code> 即首位为‘<code>10</code>’的IP地址。</li>
-<li>C类IP段 <code>192.0.0.0</code> 到 <code>223.255.255.255</code> 即首位为‘<code>110</code>’的IP地址。</li>
-<li>D类IP段 <code>224.0.0.0</code> 到 <code>239.255.255.255</code> 即首位为‘<code>1110</code>’的IP地址。</li>
-</ol>
-<p>一个A类的默认子网掩码是 255.0.0.0 ，即一个子网最多可以容纳1677万多台电脑，B类是 255.255.0.0，默认最多可以容纳6万台电脑，C类是255.255.255.0，默认最多可以容纳254台电脑。</p>
-<p>如何分辨IP的网络和主机号，我们先来看一个<code>IP</code>的例子，<code>192.168.0.1/24</code>，这个IP的网络号和主机号是多少，可以容纳的主机数目怎么计算，接下来我们一起来看一下。</p>
-<h1 id="子网掩码计算"><a href="#子网掩码计算" class="headerlink" title="子网掩码计算"></a>子网掩码计算</h1><p>通过IP地址(<code>192.168.0.1</code>)换算成二进制为<code>11000000.10101000.00000000.00000001</code>，24表示子网掩码为24位，即二进制为<code>11111111.11111111.11111100.00000000</code>的数字。</p>
-<p>网络号通过IP地址与子网掩码的按位与可以得到<code>11000000.10101000.00000000.00000000</code>，即<code>192.168.0.0</code>,显然，IP地址的主机号为<code>00000001</code>，那它可以容纳的主机数目是多少呢？这里有个简便的方法计算，即看子网掩码<code>0</code>的个数，这里是<code>10</code>，即可以容纳的主机数目是2的10次方，也就是最多可以容纳<code>1024</code>台主机。</p>
-<h1 id="实际运用"><a href="#实际运用" class="headerlink" title="实际运用"></a>实际运用</h1><p>假设现在公司有 530 台电脑，需要组成一个对等局域网，该如何设置子网掩码和 IP 地址？</p>
-<p>首先我们用的是一个 B 段的 IP 地址，A 段 IP 地址大多肯定不合适，而 C 段太少（差不多只有只有 <code>254</code> 台），不过有 B 段默认的子网掩码是 <code>255.255.0.0</code>，可以容纳的电脑大约有 6 万台，我们用肯定不合适，根据前面的技巧知道，能容纳最大主机数和子网掩码的 0 的个数有关，所以我们很自然想到子网掩码应该有10个0，因为正好 512 小于 520, 1024大于530，所以我们应该选择子网掩码为 <code>11111111.11111111.11111100.00000000</code>，也就是 <code>255.255.252.0</code>。</p>
-<p>假设我们拿到的一个 B 类 <code>137.137.x.x</code> 的网段，这样，IP 的已经是确定的，关键是要确定第三段，只要网络标识相同就可以了。我们先来确定网络号。<br>　　255.255.252.0　11111111.11111111.11111100.00000000<br>   137.137.x.x　　10001001.10001001.??????<strong>.<strong>**</strong></strong><br>　　网络标识　　　10111100.10111100.??????00.00000000</p>
-<p>这里的<code>？</code>是我们可以直接确定的，就把<code>？</code>全置为<code>0</code>吧，所以我们的IP就是 <code>10001001.10001001.000000**.********</code>，也就是说这样的IP选址可以满足我们的需求，再看我们的IP地址的第四段，可以容纳的最大主机数是 254,因为全为 0 和全为 1 的编码有特殊的作用，由530/254=2.086知第三段可以取三个数字，即 00，01，10，这样我们选择的IP地址的范围就是137.137.0.x到137.137.2.y。第三段表示的是主机号，这一段随便你取什么都行，只要在 1~254 的范围内就OK了。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>子网掩码主要是用来计算IP地址所属的网络地址和主机地址，一个分配优良的IP地址可以提高我们的局域网工作效率，同时子网掩码还可以用来减少IP地址的衰竭，因为它可以用来构建所属自组织的子网，这样可以大大减少IP地址的分配量，在 21 世纪的今天，明白子网掩码以及 TCP/IP 等底层工作是及其重要的，是每个开发者都应该知道的东西。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
-<li><p><a href="https://www.zhihu.com/question/56895036" target="_blank" rel="external">知乎：子网掩码怎么理解？</a></p>
-</li>
-<li><p><a href="https://zh.wikipedia.org/zh-hans/%E5%AD%90%E7%BD%91" target="_blank" rel="external">维基百科：子网的解释</a></p>
-</li>
-</ol>
+        <h1 id="为什么使用协程"><a href="#为什么使用协程" class="headerlink" title="为什么使用协程"></a>为什么使用协程</h1><h2 id="C10K问题"><a href="#C10K问题" class="headerlink" title="C10K问题"></a>C10K问题</h2><p>在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。</p>
+<p>当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动已经变的非常普遍了，假设每个用户都必须要与服务器保持一个或者多个TCP连接，而且每一个TCP连接需要占用一个进程(线程)的资源，这样的话，一个服务器的并发连接数是非常高的，一个普通的大一点网页服务的连接可能就过亿了。进程是操作系统最宝贵的资源，一台机器创建不了这么多进程，如果是C10k就要创建1万个进程，这个是操作系统无法承受的。就算是分布式系统，维持1亿用户在线也需要10万台服务器，成本是巨大的，只有FLAG、BAT这样的公司才有财力购买如此多的服务器。</p>
+<h2 id="怎么样解决C10K问题"><a href="#怎么样解决C10K问题" class="headerlink" title="怎么样解决C10K问题"></a>怎么样解决C10K问题</h2><p>既然有了C10K问题，程序员们就开始行动去解决它。为了解决这一问题，出现了「用同一进程/线程来同时处理若干连接」的思路，也就是I/O多路复用。于是FreeBSD推出了kqueue，Linux推出了epoll，Windows推出了IOCP。这些操作系统提供的功能就是为了解决C10K问题。因为Linux是互联网企业中使用率最高的操作系统，Epoll就成为C10K killer、高并发、高性能、异步非阻塞这些技术的代名词了。</p>
+<p>epoll技术的编程模型就是异步非阻塞回调，也可以叫做Reactor，事件驱动，事件轮循（EventLoop）。Epoll就是为了解决C10K问题而生。使用Epoll技术，使得小公司也可以玩高并发。不需要购买很多服务器，有几台服务器就可以服务大量用户。Nginx，libevent，node.js这些就是Epoll时代的产物。</p>
+<p>就这样C10K问题解决了，然后又来更高的问题，也就是C100K，C1M等。Epoll既然能解决C10K，解决什么C100K，C1M也是可以的。秘诀就是使用epoll模型，然后多买一些服务器就可以了。但是问题又来了</p>
+<blockquote>
+<p>异步嵌套回调太TM难写了。尤其是Node.js层层回调，缩进了几十层，要把程序员逼疯了。于是一个新的技术被提出来了，那就是协程（coroutine）。这个技术本质上也是异步非阻塞技术，它是将事件回调进行了包装，让程序员看不到里面的事件循环。程序员就像写阻塞代码一样简单。比如调用 client-&gt;recv() 等待接收数据时，就像阻塞代码一样写。实际上是底层库在执行recv时悄悄保存了一个状态，比如代码行数，局部变量的值。然后就跳回到EventLoop中了。什么时候真的数据到来时，它再把刚才保存的代码行数，局部变量值取出来，又开始继续执行。</p>
+<p>这个就像时间禁止的游戏一样，国王对巫师说“我必须马上得到宝物，不然就砍了你的脑袋”，巫师念了一句时间停止的咒语，直到过了1年后勇士们才把宝物送来。这时候巫师解开咒语，把宝物交给国王。这里国王就可以理解成协程，他根本没感觉到时间停止，在他停止到醒来期间发生了什么他不知道，也不关心。</p>
+<p>这就是协程的本质。协程是异步非阻塞的另外一种展现形式。Golang，Erlang，Lua协程都是这个模型。</p>
+</blockquote>
+<p>说的有点远了，关于协程和epoll模型，你可能需要到网上找一些更加详细的资料看看，现在开始我们今天的主题 – <strong>curio库使用指南</strong>。 </p>
+<h1 id="curio-一个用同步写法进行异步编程的库"><a href="#curio-一个用同步写法进行异步编程的库" class="headerlink" title="curio-一个用同步写法进行异步编程的库"></a>curio-一个用同步写法进行异步编程的库</h1><h2 id="如何把同步的代码改成异步的"><a href="#如何把同步的代码改成异步的" class="headerlink" title="如何把同步的代码改成异步的"></a>如何把同步的代码改成异步的</h2><p>首先看一个同步的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(id)</span>:</span></div><div class="line">    subject = get_subject_from_db(id)</div><div class="line">    buyinfo = get_buyinfo(id)</div><div class="line">    change = process(subject, buyinfo)</div><div class="line">    notify_change(change)</div><div class="line">    flush_cache(id)</div></pre></td></tr></table></figure>
+<p>可以看到，需要获取<code>subject</code>和<code>buyinfo</code>之后才能执行<code>process</code>，然后才能执行<code>notify_change</code>和<code>flush_cache</code>。</p>
+<p>如果使用curio异步来写的话，就是:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> curio</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(id)</span>:</span></div><div class="line">    <span class="keyword">async</span> <span class="keyword">with</span> TaskGroup() <span class="keyword">as</span> g:</div><div class="line">        subject = <span class="keyword">await</span> g.spawn(get_subject_from_db, id)</div><div class="line">        buyinfo = <span class="keyword">await</span> g.spawn(get_buyinfo, id)</div><div class="line">    </div><div class="line">    change = <span class="keyword">await</span> process(subjetc.result, buginfo)</div><div class="line">    <span class="keyword">await</span> change.join()</div><div class="line">    <span class="keyword">await</span> notifu_change(change.result)</div><div class="line">    <span class="keyword">await</span> flush_cache(id)</div></pre></td></tr></table></figure>
+<p>其实就是把函数包装成一个Task对象或者说future对象，使用spawn可以把函数包装为Task，然后等待函数完成后，从Task的result属性获取返回值。              </p>
+<p>下篇我们来聊一聊curio具体有哪些东西和怎么样去使用他们进行异步编程。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://rango.swoole.com/archives/381" target="_blank" rel="external">聊聊C10K问题及解决方案</a></p>
+<p><a href="http://curio.readthedocs.io/en/latest/index.html" target="_blank" rel="external">Curio官方文档</a></p>
 
       
     </div>
@@ -416,9 +412,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/网络/" rel="tag"># 网络</a>
+            <a href="/tags/curio/" rel="tag"># curio</a>
           
-            <a href="/tags/子网掩码/" rel="tag"># 子网掩码</a>
+            <a href="/tags/concurrent/" rel="tag"># concurrent</a>
           
         </div>
       
@@ -431,8 +427,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/19/Java-NIO最终实践之Servlet服务器/" rel="next" title="Java NIO最终实践之Web服务器">
-                <i class="fa fa-chevron-left"></i> Java NIO最终实践之Web服务器
+              <a href="/2017/10/28/linux-python3/" rel="next" title="Linux下安装python3环境">
+                <i class="fa fa-chevron-left"></i> Linux下安装python3环境
               </a>
             
           </div>
@@ -441,8 +437,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/04/30/Spring注解事务底层实践/" rel="prev" title="Spring注解事务底层实践">
-                Spring注解事务底层实践 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/04/Curio-use-guide-(2)/" rel="prev" title="使用python进行异步编程 -- curio使用指南（二）">
+                使用python进行异步编程 -- curio使用指南（二） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -637,7 +633,7 @@ gitment.render('gitment')
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP网段"><span class="nav-number">2.</span> <span class="nav-text">IP网段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#子网掩码计算"><span class="nav-number">3.</span> <span class="nav-text">子网掩码计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实际运用"><span class="nav-number">4.</span> <span class="nav-text">实际运用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么使用协程"><span class="nav-number">1.</span> <span class="nav-text">为什么使用协程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C10K问题"><span class="nav-number">1.1.</span> <span class="nav-text">C10K问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么样解决C10K问题"><span class="nav-number">1.2.</span> <span class="nav-text">怎么样解决C10K问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#curio-一个用同步写法进行异步编程的库"><span class="nav-number">2.</span> <span class="nav-text">curio-一个用同步写法进行异步编程的库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何把同步的代码改成异步的"><span class="nav-number">2.1.</span> <span class="nav-text">如何把同步的代码改成异步的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
