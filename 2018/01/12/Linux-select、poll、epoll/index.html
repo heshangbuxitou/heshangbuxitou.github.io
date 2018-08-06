@@ -105,7 +105,7 @@
 <meta name="keywords" content="IO,异步事件模型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux select、poll、epoll模式详解">
-<meta property="og:url" content="https://heshangbuxitou.github.io/2018/01/12/Linux select、poll、epoll模式详解/index.html">
+<meta property="og:url" content="https://heshangbuxitou.github.io/2018/01/12/Linux-select、poll、epoll/index.html">
 <meta property="og:site_name" content="SiYuYong&#39;s Blog">
 <meta property="og:description" content="前言这篇是Java NIO详解的前传，那为什么会在这篇文章的后面呢，因为在写完前一篇文章后，在我组织接下来的第二篇的时候发现了一些问题，有的人对同步IO和异步IO，阻塞IO和非阻塞IO的区别异常模糊，不同的人在不同的上下文给出的答案是不同的，这里会说出我个人的理解，另外，因为本文是通过对众多博客的学习和总结，可能存在理解错误。请带着怀疑的眼光，同时如果有错误希望能指出。 需要知道的概念用户空间和内">
 <meta property="og:locale" content="zh-Hans">
@@ -148,7 +148,7 @@
 
 
 
-  <link rel="canonical" href="https://heshangbuxitou.github.io/2018/01/12/Linux select、poll、epoll模式详解/"/>
+  <link rel="canonical" href="https://heshangbuxitou.github.io/2018/01/12/Linux-select、poll、epoll/"/>
 
 
 
@@ -284,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2018/01/12/Linux select、poll、epoll模式详解/">
+    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2018/01/12/Linux-select、poll、epoll/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SiYuYong">
@@ -467,7 +467,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/08/Java NIOdetailed/" rel="next" title="Java NIO详解">
+              <a href="/2018/01/08/Java-NIOdetailed/" rel="next" title="Java NIO详解">
                 <i class="fa fa-chevron-left"></i> Java NIO详解
               </a>
             
@@ -477,7 +477,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/19/Java-NIO final practice Servlet server/" rel="prev" title="Java NIO最终实践之Web服务器">
+              <a href="/2018/01/19/Java-NIO-Servlet-server/" rel="prev" title="Java NIO最终实践之Web服务器">
                 Java NIO最终实践之Web服务器 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -496,7 +496,7 @@
 <!--  id: '<%= page.title %>' -->
 <script>
 var gitment = new Gitment({
-  id: '<%= page.date %>',
+  id: location.href,
   owner: 'heshangbuxitou',
   repo: 'heshangbuxitou.github.io',
   oauth: {
