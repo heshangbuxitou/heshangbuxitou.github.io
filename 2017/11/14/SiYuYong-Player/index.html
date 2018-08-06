@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+<!-- 加载gitment的css和js文件 -->
+<link rel="stylesheet" href="/css/gitment.css"> 
+<script src="/js/gitment.js"></script>
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SiYuYong Player,开源项目," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原因现在绝大多数同学都使用各种客户端听音乐，各人有各人的喜好，我喜欢使用网易云听音乐，当我使用网易云音乐的时候，发现许多歌没有版权，然后打开虾米去找歌的时候却发现虾米也没有，每次听歌要打开好几个软件来回切换搜索很烦。所以就有了下面的基于Flask+angularjs的超级强大的音乐播放器SiYuYong Player。 功能 可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主流音乐网站的歌曲，这个">
+<meta name="keywords" content="SiYuYong Player,开源项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SiYuYong Player-全平台音乐播放器">
+<meta property="og:url" content="https://heshangbuxitou.github.io/2017/11/14/SiYuYong-Player/index.html">
+<meta property="og:site_name" content="SiYuYong&#39;s Blog">
+<meta property="og:description" content="原因现在绝大多数同学都使用各种客户端听音乐，各人有各人的喜好，我喜欢使用网易云听音乐，当我使用网易云音乐的时候，发现许多歌没有版权，然后打开虾米去找歌的时候却发现虾米也没有，每次听歌要打开好几个软件来回切换搜索很烦。所以就有了下面的基于Flask+angularjs的超级强大的音乐播放器SiYuYong Player。 功能 可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主流音乐网站的歌曲，这个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://119.29.169.58:8080/playall.gif">
+<meta property="og:image" content="http://119.29.169.58:8080/album.gif">
+<meta property="og:image" content="http://119.29.169.58:8080/downbackup.gif">
+<meta property="og:image" content="http://119.29.169.58:8080/downbackup.gif">
+<meta property="og:updated_time" content="2017-12-10T06:39:32.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SiYuYong Player-全平台音乐播放器">
+<meta name="twitter:description" content="原因现在绝大多数同学都使用各种客户端听音乐，各人有各人的喜好，我喜欢使用网易云听音乐，当我使用网易云音乐的时候，发现许多歌没有版权，然后打开虾米去找歌的时候却发现虾米也没有，每次听歌要打开好几个软件来回切换搜索很烦。所以就有了下面的基于Flask+angularjs的超级强大的音乐播放器SiYuYong Player。 功能 可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主流音乐网站的歌曲，这个">
+<meta name="twitter:image" content="http://119.29.169.58:8080/playall.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://heshangbuxitou.github.io/2017/11/14/SiYuYong-Player/"/>
+
+
+
+
+
+<meta name="google-site-verification" content="3CjstPVfqGKNYOswM2Dl407aZWDTievG6ytMf7zpXZI" />
+<meta name="baidu-site-verification" content="KPNc5qApqS" />
+
+  <title>SiYuYong Player-全平台音乐播放器 | SiYuYong's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SiYuYong's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2017/11/14/SiYuYong-Player/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SiYuYong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/myavatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SiYuYong's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SiYuYong Player-全平台音乐播放器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-14T23:53:46+08:00">
+                2017-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"
+            ></span> 次</span>
+          
+
+          
+            
+          
+
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>现在绝大多数同学都使用各种客户端听音乐，各人有各人的喜好，我喜欢使用网易云听音乐，当我使用网易云音乐的时候，发现许多歌没有版权，然后打开虾米去找歌的时候却发现虾米也没有，每次听歌要打开好几个软件来回切换搜索很烦。所以就有了下面的基于<code>Flask+angularjs</code>的超级强大的音乐播放器<a href="http://119.29.169.58:8888" target="_blank" rel="external">SiYuYong Player</a>。</p>
+<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ul>
+<li>可以搜索和播放来自网易云音乐，虾米，QQ音乐三个主流音乐网站的歌曲，这个曲库足够强大了吧。</li>
+</ul>
+<p><img src="http://119.29.169.58:8080/playall.gif" alt=""></p>
+<ul>
+<li>支持歌单功能，你可以方便的播放，收藏和创建自己的歌单。</li>
+</ul>
+<p><img src="http://119.29.169.58:8080/album.gif" alt=""></p>
+<ul>
+<li>支持导入、导出歌单数据，你可以很方便的把自己的歌单放到文件做备份</li>
+</ul>
+<p>如果你对本项目有兴趣，或者你有更多有意思的想法和功能欢迎提交PR和Issue，可以评论或者给我发邮件留言。</p>
+<h1 id="2017年11月19日更新"><a href="#2017年11月19日更新" class="headerlink" title="2017年11月19日更新"></a>2017年11月19日更新</h1><ul>
+<li>支持登陆last.fm记录最新歌单，你可以在其他设备上登陆下载你的最新歌单</li>
+</ul>
+<p><img src="http://119.29.169.58:8080/downbackup.gif" alt=""></p>
+<h1 id="2017年12月10日更新"><a href="#2017年12月10日更新" class="headerlink" title="2017年12月10日更新"></a>2017年12月10日更新</h1><ul>
+<li>支持打开歌单功能，现在可以在我的歌单界面打开想听的歌单了。</li>
+<li>修复版权原因无法播放歌曲时自动暂停的问题</li>
+<li>修复网易云音乐歌单只显示第一首歌的Bug（原因：老API接口被网易废弃）</li>
+</ul>
+<p><img src="http://119.29.169.58:8080/downbackup.gif" alt=""></p>
+<h1 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h1><p>在开发过程中，参考了很多音乐网站API的分析代码和文章，感谢这些开发者的努力。（具体项目网址参考源码）</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SiYuYong-Player/" rel="tag"># SiYuYong Player</a>
+          
+            <a href="/tags/开源项目/" rel="tag"># 开源项目</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/13/旧笔记本折腾记/" rel="next" title="旧笔记本折腾记">
+                <i class="fa fa-chevron-left"></i> 旧笔记本折腾记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/21/flask-cache/" rel="prev" title="Flask-Cache缓存使用小记">
+                Flask-Cache缓存使用小记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+
+    
+      <div id="gitment"></div>
+
+<!-- 主页不要加载gitment -->
+
+<!--  id: '<%= page.title %>' -->
+<script>
+var gitment = new Gitment({
+  owner: 'heshangbuxitou',
+  repo: 'heshangbuxitou.github.io',
+  oauth: {
+    client_id: '14715ee89ca1af10566d',
+    client_secret: '0b809ebdd2c4d75410f4ef8237f0815d0f2b5484',
+  },
+})
+gitment.render('gitment')
+
+</script>
+
+  
+    
+
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/myavatar.gif"
+                alt="SiYuYong" />
+            
+              <p class="site-author-name" itemprop="name">SiYuYong</p>
+              <p class="site-description motion-element" itemprop="description">胡编一通，乱写一气</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/heshangbuxitou" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:siyuyon@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://heyanfu.github.io/" title="何神的博客" target="_blank" rel="external nofollow">何神的博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#功能"><span class="nav-number">2.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2017年11月19日更新"><span class="nav-number">3.</span> <span class="nav-text">2017年11月19日更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2017年12月10日更新"><span class="nav-number">4.</span> <span class="nav-text">2017年12月10日更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#致谢"><span class="nav-number">5.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SiYuYong</span>
+
+  
+</div>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

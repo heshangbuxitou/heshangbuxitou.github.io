@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+<!-- 加载gitment的css和js文件 -->
+<link rel="stylesheet" href="/css/gitment.css"> 
+<script src="/js/gitment.js"></script>
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NIO,select,Servlet,Tomcat 5.0," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言C10K问题在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。 当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动已经变的非">
+<meta name="keywords" content="NIO,select,Servlet,Tomcat 5.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java NIO最终实践之Web服务器">
+<meta property="og:url" content="https://heshangbuxitou.github.io/2018/01/19/Java-NIO最终实践之Servlet服务器/index.html">
+<meta property="og:site_name" content="SiYuYong&#39;s Blog">
+<meta property="og:description" content="前言C10K问题在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。 当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动已经变的非">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://heshangbuxitou.github.io/images/NIOWebServer/image1.gif">
+<meta property="og:image" content="https://heshangbuxitou.github.io/images/NIOWebServer/image2.gif">
+<meta property="og:image" content="https://heshangbuxitou.github.io/images/NIOWebServer/image3.gif">
+<meta property="og:updated_time" content="2018-01-26T06:15:48.914Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java NIO最终实践之Web服务器">
+<meta name="twitter:description" content="前言C10K问题在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。 当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动已经变的非">
+<meta name="twitter:image" content="https://heshangbuxitou.github.io/images/NIOWebServer/image1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://heshangbuxitou.github.io/2018/01/19/Java-NIO最终实践之Servlet服务器/"/>
+
+
+
+
+
+<meta name="google-site-verification" content="3CjstPVfqGKNYOswM2Dl407aZWDTievG6ytMf7zpXZI" />
+<meta name="baidu-site-verification" content="KPNc5qApqS" />
+
+  <title>Java NIO最终实践之Web服务器 | SiYuYong's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SiYuYong's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2018/01/19/Java-NIO最终实践之Servlet服务器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SiYuYong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/myavatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SiYuYong's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java NIO最终实践之Web服务器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T16:11:31+08:00">
+                2018-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+
+          
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"
+            ></span> 次</span>
+          
+
+          
+            
+          
+
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="C10K问题"><a href="#C10K问题" class="headerlink" title="C10K问题"></a>C10K问题</h2><p>在互联网开始的早期，使用互联网的人较少，一台服务器同时在线的连接也不是很多，所以最初的服务器设计的时候使用进程或者是线程的方式分配一个TCP连接，这个时候不存在C10K的难题。</p>
+<p>当到了Web2.0的时代，互联网不再是单纯的浏览网页了，它开始需要进行交互，随着互联网的进一步发展，用户界面和界面交互都变得非常复杂起来，应用程序的逻辑也随之变的更加复杂，即时通信和在线的实时互动已经变的非常普遍了，假设每个用户都必须要与服务器保持一个或者多个TCP连接，而且每一个TCP连接需要占用一个进程(线程)的资源，这样的话，一个服务器的并发连接数是非常高的，一个普通的大一点网页服务的连接可能就过亿了。进程是操作系统最宝贵的资源，一台机器创建不了这么多进程，如果是C10k就要创建1万个进程，这个是操作系统无法承受的。就算是分布式系统，维持1亿用户在线也需要10万台服务器，成本是巨大的，只有FLAG、BAT这样的公司才有财力购买如此多的服务器。</p>
+<h2 id="怎样解决"><a href="#怎样解决" class="headerlink" title="怎样解决"></a>怎样解决</h2><p>解决这个问题的方法其实就在我们身边，要知道在我们打电话的时候，其中无线频率是稀有的资源，不能每个人都有各自的频率，因此无线频率提供商使用多路复用技术通过一个频率发送多个呼叫。在一个例子中，把呼叫分成一些段，然后给这些段很短的持续时间，并在接收端重新装配。这就叫做<em>时分多路复用</em>（time-division multiplexing），即 TDM。而我们解决这个难题的方式也是一样，只不过名字有点不同，它就是<em>IO多路复用</em>。</p>
+<p>关于<em>IO多路复用</em>的知识你需要到网上寻找更加详细的知识，或者我以前的文章，这里就不细讲了，我们这篇主要讲的是Java，Java在JDK1.4版本的时候发布了NIO，因此我们在Java中也可以使用<em>IO多路复用</em>来处理连接的IO了。</p>
+<h1 id="使用NIO的Web服务器"><a href="#使用NIO的Web服务器" class="headerlink" title="使用NIO的Web服务器"></a>使用NIO的Web服务器</h1><h2 id="不阻塞到阻塞"><a href="#不阻塞到阻塞" class="headerlink" title="不阻塞到阻塞"></a>不阻塞到阻塞</h2><p>对于使用NIO的服务器，我们是必须要是非阻塞的读写，否则NIO将不能正常工作，但是在我们的Web服务器中会引发许多问题，因为一个请求过来，我们的客户端或服务器应用程序可能读取完整信息、部分消息或者根本读取不到消息。另外，非阻塞读可能读取到太多的消息，从而强制为下一个呼叫准备一个额外的缓冲区。最后，不像流那样，读取了零字节并不表明已经完全接收了消息。</p>
+<p>因此这就表示使用<code>readline</code>等方法都有一些困难，因此我们需要使用<code>java.io.PipedInput</code>和<code>PipedOutputStream</code>类来把生产者/消费者模型应用到消费者非阻塞<code>IO</code>。当读取非阻塞通道时，把它写到正由第二个线程消费的管道。读写数据被我们用一个管道分开了，这样让一个线程单独负责处理非阻塞通道（生产者），让另一个线程单独负责把数据作为流消费（消费者）。管道也为应用程序服务器解决了非阻塞 <code>IO</code> 问题，因为<code>servlet</code>在消费<code>IO</code>时将采用阻塞语义。</p>
+<h2 id="Server类"><a href="#Server类" class="headerlink" title="Server类"></a>Server类</h2><p>在这里Server类主要是对多路复用循环的处理，它监听我们感兴趣的IO事件，并且通过<code>selector.select();</code>返回发生的事件数，我们通过对事件返回的<code>Iterator</code>进行遍历处理，注意，所有的数据都是在这个循环中读取的。通常会把从特定<code>socket</code>中读取字节的任务分配给一个新线程。使用的是<code>NIO</code>选择器事件驱动方法，实际上可以用单个线程处理成千上万的客户机，不过，我们还会在后面看到线程仍有一个角色要扮演。这里就是监控发生的事件，然后把它发给<code>ServerEventHandler</code>类进行处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listen</span><span class="params">()</span> </span>&#123;</div><div class="line">	SelectionKey key = <span class="keyword">null</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">for</span> (;;) &#123;</div><div class="line">			selector.select();</div><div class="line">			Iterator it = selector.selectedKeys().iterator();</div><div class="line">			<span class="keyword">while</span> (it.hasNext()) &#123;</div><div class="line">				key = (SelectionKey) it.next();</div><div class="line">				handleKey(key);</div><div class="line">				it.remove();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">		key.cancel();</div><div class="line">	&#125; <span class="keyword">catch</span> (NullPointerException e) &#123;</div><div class="line">		<span class="comment">// NullPointer at sun.nio.ch.WindowsSelectorImpl, Bug: 4729342</span></div><div class="line">		e.printStackTrace();			</div><div class="line">	&#125;</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleKey</span><span class="params">(SelectionKey key)</span></span></div><div class="line"><span class="function">   <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">   <span class="keyword">if</span> (key.isAcceptable())</div><div class="line">       myHandler.acceptNewClient(selector, key);</div><div class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable())</div><div class="line">       myHandler.readDataFromSocket(key);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="ServerEventHandle类"><a href="#ServerEventHandle类" class="headerlink" title="ServerEventHandle类"></a>ServerEventHandle类</h2><p>ServerEventHandler类是处理IO事件的类。当新的连接到来时，我们就实例化一个新的<code>Client</code>对象，该对象代表了那个客户端的状态。数据是以非阻塞方式从通道中读取的，并被写到<code>Client</code>对象中。 </p>
+<p>我们使用生产者/消费者模型来处理<code>Client</code>，当有新的<code>Client</code>对象被处理时，把它放到队列中，消费者可以在队列中获取到<code>Client</code>并进行处理，当然，在队列为空的时候消费者线程是阻塞的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">acceptNewClient</span><span class="params">(Selector selector, SelectionKey key)</span></span></div><div class="line"><span class="function">    <span class="keyword">throws</span> IOException, ClosedChannelException </span>&#123;</div><div class="line">    ServerSocketChannel server = (ServerSocketChannel) key.channel();</div><div class="line">    SocketChannel channel = server.accept();</div><div class="line">    channel.configureBlocking(<span class="keyword">false</span>);</div><div class="line">    SelectionKey readKey = channel.register(selector, SelectionKey.OP_READ);</div><div class="line">    readKey.attach(<span class="keyword">new</span> Client(readKey, q));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readDataFromSocket</span><span class="params">(SelectionKey key)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="keyword">int</span> count = ((SocketChannel)key.channel()).read(byteBuffer);</div><div class="line">    <span class="keyword">if</span> ( count &gt; <span class="number">0</span>) &#123;</div><div class="line">        byteBuffer.flip();</div><div class="line">        <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[count];</div><div class="line">        byteBuffer.get(data, <span class="number">0</span>, count);</div><div class="line">        ((Client)key.attachment()).write(data);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( count &lt; <span class="number">0</span>) &#123;</div><div class="line">        key.channel().close();</div><div class="line">    &#125;</div><div class="line">    byteBuffer.clear();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里使用的队列<code>Queue</code>，它提供了队列放数据（Client），这个也可以看做一个简单的线程池:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Queue</span> <span class="keyword">extends</span> <span class="title">LinkedList</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> waitingThreads = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(Object obj)</span></span></div><div class="line"><span class="function">	</span>&#123;</div><div class="line">		addLast(obj);</div><div class="line">		notify();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Object <span class="title">remove</span><span class="params">()</span></span></div><div class="line"><span class="function">	</span>&#123;</div><div class="line">		<span class="keyword">if</span> ( isEmpty() ) &#123;</div><div class="line">			<span class="keyword">try</span>	&#123; waitingThreads++; wait();&#125; </div><div class="line">			<span class="keyword">catch</span> (InterruptedException e)	&#123;Thread.interrupted();&#125;</div><div class="line">			waitingThreads--;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> removeFirst();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> 	(size() - waitingThreads &lt;= <span class="number">0</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里我们创建的消费者线程数与建立的连接数是没有关系的，应该根据处理器的数量和请求的长度或持续时间进行调整，如果感觉处理请求的速度较慢，可以添加多一点线程，这样处理速度就会加快了。</p>
+<p><code>Client</code>类有两个用途。首先，通过把传入的非阻塞<code>IO</code>转换成可由<code>Servlet API</code>消费的阻塞 InputStream ，它解决了阻塞/非阻塞问题。其次，它管理特定客户端的请求状态。因为当全部读取消息时，非阻塞通道没有给出任何提示，所以强制我们在协议层处理这一情况。<code>Client</code>类在任意指定的时刻都指出了它是否正在参与进行中的请求。如果它准备处理新请求，<code>write()</code>方法就会为请求处理而将该客户端排到队列中。如果它已经参与了请求，它就只是使用 PipedInputStream 和 PipedOutputStream 类把传入的字节转换成一个 InputStream 。如图是处理的过程和转换：</p>
+<p><img src="/images/NIOWebServer/image1.gif" alt=""></p>
+<p>在<code>Client</code>自己排队后，我们的消费者线程就可以消费它了。我们使用<code>RequestHandlerThread</code>类承来处理<code>Client</code>。至此，我们已经看到主线程是如何连续地循环的，它要么接受新客户机，要么读取新的 <code>I/O</code>。工作线程循环等待新请求。当客户机在请求队列上变为可用时，它就马上被<code>remove()</code>方法中阻塞的第一个等待线程所消费。<code>RequestHandlerThread</code>类代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">		Client client = (Client) myQueue.remove();</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			<span class="keyword">for</span> (; ; ) &#123;</div><div class="line">				HttpRequest req = <span class="keyword">new</span> HttpRequest(client.clientInputStream,</div><div class="line">						myServletContext);</div><div class="line">				HttpResponse res = <span class="keyword">new</span> HttpResponse(client.key);</div><div class="line">				defaultServlet.service(req, res);</div><div class="line">				<span class="keyword">if</span> (client.notifyRequestDone())</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			client.key.cancel();</div><div class="line">			client.key.selector().wakeup();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后该线程创建新的<code>HttpRequest</code>和<code>HttpResponse</code>实例，并调用<code>defaultServlet</code>的 service 方法。注意，<code>HttpRequest</code>是用<code>Client</code>对象的<code>clientInputStream</code>属性构造的。 <code>PipedInputStream</code>就是负责把非阻塞<code>IO</code>转换成阻塞流。</p>
+<p>从现在开始，请求处理就与我们在<code>J2EE Servlet API</code>中期望的相似。当对<code>servlet</code>的调用返回时，工作线程在返回到队列中之前，会检查是否有来自相同客户端的另一个请求可用。事实上，线程会对队列尝试另一个<code>remove()</code>调用，并变成阻塞，直到下一个请求可用。</p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>以下是在大量的连接下使用NIO的Web服务器与<code>Tomcat5.0</code>比较的结果，因为<code>Tomcat</code>使用的是标准IO创建的Web服务器。下面是一些说明：</p>
+<ol>
+<li><p>Tomcat 是用最大的线程数量<code>2000</code>来配置的，而我们的服务器只允许用<code>4</code>个工作线程运行。</p>
+</li>
+<li><p>每个服务器是针对相同的一组简单 HTTP get 测试的，这些 HTTP get 基本上由文本内容组成。<br>把加载工具（Microsoft Web Application Stress Tool）设置为使用“Keep-Alive”会话，导致了大约要为每个用户分配一个 socket。然后它导致了在 Tomcat 上为每个用户分配一个线程，而 NIO 服务器用固定数量的线程来处理相同的负载。</p>
+</li>
+</ol>
+<p>下图展示了在不断增加负载下的“请求/秒”率。在 200 个用户时，性能是相似的。但当用户数量超过 600 时，Tomcat 的性能开始急剧下降。这最有可能是由于在这么多的线程间切换上下文的开销而导致的。相反，基于<code>NIO</code>的服务器的性能则以线性方式下降。记住，Tomcat 必须为每个用户分配一个线程，而 NIO 服务器只配置有<code>4</code>个工作线程。</p>
+<p>请求/秒<br><img src="/images/NIOWebServer/image2.gif" alt=""></p>
+<p>还有一张图也进一步显示了<code>NIO</code>的性能。它展示了操作的<code>Socket</code>连接错误数/分钟。同样，在大约 <code>600</code>个用户时，<code>Tomcat</code>的性能急剧下降，而基于<code>NIO</code>的服务器的错误率保持相对较低。</p>
+<p>Socket 连接错误数/分钟<br><img src="/images/NIOWebServer/image3.gif" alt=""></p>
+<p>以上代码皆可以在我的github中找到。<a href="https://github.com/heshangbuxitou/" target="_blank" rel="external">https://github.com/heshangbuxitou/</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="http://yangyi.iteye.com/blog/699550" target="_blank" rel="external">NIO Web服务器示例</a></li>
+<li><a href="http://www.importnew.com/26563.html" target="_blank" rel="external">关于 NIO 你不得不知道的一些“地雷”</a></li>
+<li><a href="http://www.importnew.com/27729.html#comment-638147" target="_blank" rel="external">谈谈 Tomcat 请求处理流程</a></li>
+<li><a href="https://zh.wikipedia.org/zh-hans/Apache_Tomcat" target="_blank" rel="external">Apache Tomcat</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NIO/" rel="tag"># NIO</a>
+          
+            <a href="/tags/select/" rel="tag"># select</a>
+          
+            <a href="/tags/Servlet/" rel="tag"># Servlet</a>
+          
+            <a href="/tags/Tomcat-5-0/" rel="tag"># Tomcat 5.0</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/12/Linux select、poll、epoll模式详解/" rel="next" title="Linux select、poll、epoll模式详解">
+                <i class="fa fa-chevron-left"></i> Linux select、poll、epoll模式详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/19/子网掩码详解/" rel="prev" title="子网掩码详解">
+                子网掩码详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+
+    
+      <div id="gitment"></div>
+
+<!-- 主页不要加载gitment -->
+
+<!--  id: '<%= page.title %>' -->
+<script>
+var gitment = new Gitment({
+  owner: 'heshangbuxitou',
+  repo: 'heshangbuxitou.github.io',
+  oauth: {
+    client_id: '14715ee89ca1af10566d',
+    client_secret: '0b809ebdd2c4d75410f4ef8237f0815d0f2b5484',
+  },
+})
+gitment.render('gitment')
+
+</script>
+
+  
+    
+
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/myavatar.gif"
+                alt="SiYuYong" />
+            
+              <p class="site-author-name" itemprop="name">SiYuYong</p>
+              <p class="site-description motion-element" itemprop="description">胡编一通，乱写一气</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/heshangbuxitou" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:siyuyon@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://heyanfu.github.io/" title="何神的博客" target="_blank" rel="external nofollow">何神的博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C10K问题"><span class="nav-number">1.1.</span> <span class="nav-text">C10K问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎样解决"><span class="nav-number">1.2.</span> <span class="nav-text">怎样解决</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用NIO的Web服务器"><span class="nav-number">2.</span> <span class="nav-text">使用NIO的Web服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不阻塞到阻塞"><span class="nav-number">2.1.</span> <span class="nav-text">不阻塞到阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Server类"><span class="nav-number">2.2.</span> <span class="nav-text">Server类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServerEventHandle类"><span class="nav-number">2.3.</span> <span class="nav-text">ServerEventHandle类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能"><span class="nav-number">3.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SiYuYong</span>
+
+  
+</div>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
