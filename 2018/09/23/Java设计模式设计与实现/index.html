@@ -101,18 +101,18 @@
 
 
 
-<meta name="description" content="胡编一通，乱写一气">
+<meta name="description" content="前言从学习设计模式到现在也有一个月了，这段时间一直在看书和自己的实践来学习设计模式。在我的github中能找到 23 种设计模式的Java实现代码。 设计模式是什么？我们首先来看这样一个问题。官方的回答是：设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。非官方的回答则是：设计模式是对已有问题的解决方案">
 <meta name="keywords" content="Design Patterns">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java设计模式设计与实现">
 <meta property="og:url" content="https://heshangbuxitou.github.io/2018/09/23/Java设计模式设计与实现/index.html">
 <meta property="og:site_name" content="SiYuYong&#39;s Blog">
-<meta property="og:description" content="胡编一通，乱写一气">
+<meta property="og:description" content="前言从学习设计模式到现在也有一个月了，这段时间一直在看书和自己的实践来学习设计模式。在我的github中能找到 23 种设计模式的Java实现代码。 设计模式是什么？我们首先来看这样一个问题。官方的回答是：设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。非官方的回答则是：设计模式是对已有问题的解决方案">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-23T06:46:46.931Z">
+<meta property="og:updated_time" content="2018-09-23T09:05:41.223Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java设计模式设计与实现">
-<meta name="twitter:description" content="胡编一通，乱写一气">
+<meta name="twitter:description" content="前言从学习设计模式到现在也有一个月了，这段时间一直在看书和自己的实践来学习设计模式。在我的github中能找到 23 种设计模式的Java实现代码。 设计模式是什么？我们首先来看这样一个问题。官方的回答是：设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。非官方的回答则是：设计模式是对已有问题的解决方案">
 
 
 
@@ -353,7 +353,23 @@
       
 
       
-        
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>从学习设计模式到现在也有一个月了，这段时间一直在看书和自己的实践来学习设计模式。在<a href="https://github.com/heshangbuxitou/mytest/tree/master/src/com/zy/designs" target="_blank" rel="external">我的github</a>中能找到 23 种设计模式的<code>Java</code>实现代码。</p>
+<p>设计模式是什么？我们首先来看这样一个问题。官方的回答是：设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。非官方的回答则是：设计模式是对已有问题的解决方案，通过对生活中的例子通过抽象和分解，可以发现许多相似的地方，然后对相似的地方进行处理的总结，总结出一些最佳实践以及核心解决方案，这些最佳实践通过沉淀就成为了现在的设计模式。</p>
+<h1 id="设计模式的六大原则"><a href="#设计模式的六大原则" class="headerlink" title="设计模式的六大原则"></a>设计模式的六大原则</h1><p>通过对设计模式的实践和观察，可以发现设计模式主要遵循的还是面向对象代码的六大原则，可以这么说，每个设计模式都有对六大原则的最佳实践，首先我们来看看开闭原则，开闭原则可以算是软件开发中第一个被反复强调的原则了，它强调的是代码写完后的拓展，代码编写应该尽量考虑后面可能变化的需求，如果新需求有增加，我们不应该对前面写的代码进行大幅度的修改，而是应该尽量不对写好的代码进行修改，而是添加新的需求类来处理新的需求。在面向对象中存在接口和抽象类这样的语法可以很方便实践这个原则。下面通过简单工厂模式来演示开闭原则的使用。</p>
+<p>假设我们需要写一个实现加减法的程序，如果直接通过代码写的话是这个样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        String numberA = <span class="string">"5"</span>;</div><div class="line">        String numberB = <span class="string">"6"</span>;</div><div class="line">        String operator = <span class="string">"-"</span>;</div><div class="line">        <span class="keyword">double</span> result = <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (operator.equals(<span class="string">"+"</span>))&#123;</div><div class="line">            result = Double.parseDouble(numberA) + Double.parseDouble(numberB) </div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(operator.equals(<span class="string">"-"</span>))&#123;</div><div class="line">            result = Double.parseDouble(numberA) - Double.parseDouble(numberB)</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="string">"结果是："</span> + result);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>这样的代码粗看上去好像没有什么毛病，功能也是可以实现的，但是有几个问题需要考虑下，这儿数字和操作都是独立的东西，是客户端输入的，而加法和减法的操作是程序的后台业务逻辑，我们把显示和业务逻辑分开是不是更好？第二个是现在已经有了加减法的处理，那现在我们还需要加一个乘除的操作应该怎么加？在程序中直接添加新的 <code>if</code> 分支吗？那要是还有其他的操作过来呢，又去修改原来的代码？毫无疑问这是很糟糕的操作。</p>
+<p>我们使用简单工厂的设计模式来解决这个问题，首先需要写一个抽象 <code>Opertor</code> 类，它是所有计算类的父类，代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Operator</span> </span>&#123;</div><div class="line">    <span class="keyword">double</span> numberA;</div><div class="line">    <span class="keyword">double</span> numberB;</div><div class="line">    <span class="comment">//省略了属性的get和set代码，方便排版</span></div><div class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">getResult</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义了计算类，我们来定义它的实现类-加法类，代码如下:（减法类，乘法类，除法类与其类似，可以自行实现）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperatorAdd</span> <span class="keyword">extends</span> <span class="title">Operator</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">double</span> <span class="title">getResult</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> numberA + numberB;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后在我们的客户端程序中来使用这些类，前面提到过最好是将程序的显示和业务逻辑分离，所以 <code>Client</code> 代码中只有输入和输出的逻辑，它不负责产生计算类，那么我们使用一个工厂类来实例化计算类，把产生计算类的任务交给工厂类，工厂类的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Factory</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Operator <span class="title">createOperation</span><span class="params">(String operate)</span></span>&#123;</div><div class="line">        Operator operator;</div><div class="line">        <span class="keyword">switch</span> (operate)&#123;</div><div class="line">            <span class="keyword">case</span> <span class="string">"+"</span>:</div><div class="line">                operator = <span class="keyword">new</span> OperatorAdd();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">"-"</span>:</div><div class="line">                operator = <span class="keyword">new</span> OperatorSub();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">"*"</span>:</div><div class="line">                operator = <span class="keyword">new</span> OperatorMul();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">"/"</span>:</div><div class="line">                operator = <span class="keyword">new</span> OperatorDiv();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"请输入正确的操作符号.."</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> operator;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后我们在客户端可以很方便的进行对应的计算了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        String numberA = <span class="string">"5"</span>; <span class="comment">//假设输入</span></div><div class="line">        String numberB = <span class="string">"6"</span>; <span class="comment">//假设输入</span></div><div class="line">        String operator = <span class="string">"*"</span>; <span class="comment">//假设输入</span></div><div class="line"></div><div class="line">        Operator operation = Factory.createOperation(operator);</div><div class="line">        operation.numberA = Double.parseDouble(numberA);</div><div class="line">        operation.numberB = Double.parseDouble(numberB);</div><div class="line">        System.out.println(operation.getResult());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子写有什么好处呢？首先我们把每个计算的操作放到了计算类的内部，每个计算类之间不需要交互，客户端也不会知道计算类的内部是怎么计算的，这样很好的分开了显示也业务逻辑。第二呢，假设我们需要增加新的计算类，只要添加新的计算类的子类实现就行了，然后在工厂类里添加分支（假如工厂通过反射建立对象的话，这一步可以省略）就可以实现新的功能，这样的话实现的话，遵循了开闭原则，让代码的拓展看起来非常流畅。</p>
+<p>再来</p>
+
       
     </div>
     
@@ -472,8 +488,17 @@ gitment.render('gitment')
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -567,6 +592,22 @@ gitment.render('gitment')
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计模式的六大原则"><span class="nav-number">2.</span> <span class="nav-text">设计模式的六大原则</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
