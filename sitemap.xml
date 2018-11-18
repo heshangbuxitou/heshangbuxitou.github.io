@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://heshangbuxitou.github.io/2018/11/18/Spring-Boot-CORS%E5%AE%9E%E8%B7%B5/</loc>
+    
+    <lastmod>2018-11-18T15:37:32.416Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://heshangbuxitou.github.io/2018/04/30/Spring-annotation-transaction-practice/</loc>
+    
+    <lastmod>2018-11-17T18:20:49.021Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://heshangbuxitou.github.io/2018/01/02/JavaIO-overview/</loc>
     
     <lastmod>2018-11-12T07:18:39.013Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>https://heshangbuxitou.github.io/2017/10/20/seo-practice/</loc>
     
     <lastmod>2018-09-23T07:01:00.918Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://heshangbuxitou.github.io/2018/04/30/Spring-annotation-transaction-practice/</loc>
-    
-    <lastmod>2018-04-30T09:26:38.070Z</lastmod>
     
   </url>
   

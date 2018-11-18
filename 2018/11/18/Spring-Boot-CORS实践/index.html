@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+<!-- 加载gitment的css和js文件 -->
+<link rel="stylesheet" href="/css/gitment.css"> 
+<script src="/js/gitment.js"></script>
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring Boot,CORS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言现代浏览器通过Http请求的方式获取服务器的响应，也可以称之为获取服务器上的资源。在浏览器的请求方式中有一个常用请求方式就是 AJAX，AJAX通过发送XMLHttpRequest 请求来获取服务器资源。AJAX 访问服务器资源非常方便，但是也存在一些限制，其中很常见的就是浏览器的同源限制。什么是同源限制呢？同源是指源网页和服务器必须要是有三个相同，即协议、域名和端口都要相同，不同源的访问下浏">
+<meta name="keywords" content="Spring Boot,CORS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot CORS实践">
+<meta property="og:url" content="https://heshangbuxitou.github.io/2018/11/18/Spring-Boot-CORS实践/index.html">
+<meta property="og:site_name" content="SiYuYong&#39;s Blog">
+<meta property="og:description" content="前言现代浏览器通过Http请求的方式获取服务器的响应，也可以称之为获取服务器上的资源。在浏览器的请求方式中有一个常用请求方式就是 AJAX，AJAX通过发送XMLHttpRequest 请求来获取服务器资源。AJAX 访问服务器资源非常方便，但是也存在一些限制，其中很常见的就是浏览器的同源限制。什么是同源限制呢？同源是指源网页和服务器必须要是有三个相同，即协议、域名和端口都要相同，不同源的访问下浏">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-18T15:37:32.416Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot CORS实践">
+<meta name="twitter:description" content="前言现代浏览器通过Http请求的方式获取服务器的响应，也可以称之为获取服务器上的资源。在浏览器的请求方式中有一个常用请求方式就是 AJAX，AJAX通过发送XMLHttpRequest 请求来获取服务器资源。AJAX 访问服务器资源非常方便，但是也存在一些限制，其中很常见的就是浏览器的同源限制。什么是同源限制呢？同源是指源网页和服务器必须要是有三个相同，即协议、域名和端口都要相同，不同源的访问下浏">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://heshangbuxitou.github.io/2018/11/18/Spring-Boot-CORS实践/"/>
+
+
+
+
+
+<meta name="google-site-verification" content="3CjstPVfqGKNYOswM2Dl407aZWDTievG6ytMf7zpXZI" />
+<meta name="baidu-site-verification" content="KPNc5qApqS" />
+
+  <title>Spring Boot CORS实践 | SiYuYong's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SiYuYong's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2018/11/18/Spring-Boot-CORS实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SiYuYong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/myavatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SiYuYong's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring Boot CORS实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-18T02:19:07+08:00">
+                2018-11-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"
+            ></span> 次</span>
+          
+
+          
+            
+          
+
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>现代浏览器通过<code>Http</code>请求的方式获取服务器的响应，也可以称之为获取服务器上的资源。在浏览器的请求方式中有一个常用请求方式就是 <code>AJAX</code>，<code>AJAX</code>通过发送<code>XMLHttpRequest</code> 请求来获取服务器资源。<code>AJAX</code> 访问服务器资源非常方便，但是也存在一些限制，其中很常见的就是浏览器的同源限制。什么是同源限制呢？同源是指源网页和服务器必须要是有三个相同，即协议、域名和端口都要相同，不同源的访问下浏览器会阻止读取服务器返回的资源。</p>
+<h1 id="常用的跨域方式-CORS"><a href="#常用的跨域方式-CORS" class="headerlink" title="常用的跨域方式-CORS"></a>常用的跨域方式-CORS</h1><p>CORS是现在大多数浏览器都支持的一种跨域方式，浏览器会自动使用这个方式来跨域请求资源，当服务器返回对应的CORS控制头时，浏览器会将服务器的资源<code>正确</code>的返回给客户端。</p>
+<p>浏览器在检测到访问的资源不同源时会添加<code>CORS</code> 对应的请求头，比如<code>Origin</code> 请求头，用来表示本次请求来自哪个请求源。服务器支持<code>CORS</code> 跨域请求的话，他会对返回资源做相应的处理，比如增加一些资源访问控制的响应头。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Access-Control-Allow-Origin</span>: http://api.bob.com</div><div class="line"><span class="attribute">Access-Control-Allow-Credentials</span>: true</div><div class="line"><span class="attribute">Access-Control-Expose-Headers</span>: FooBar</div><div class="line"><span class="attribute">Content-Type</span>: text/html; charset=utf-8</div></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>Access-Control-Allow-Origin</strong>  请求头表示接收的域名的请求，也可以用<code>*</code> 来表示任意域名。</p>
+</li>
+<li><p><strong>Access-Control-Allow-Credentials</strong> 表示浏览器是否可以传递当前网页的<code>Cookie</code> ，注意，服务器设置了可以发送<code>Cookie</code> ，客户端发送请求的时候需要设置通信对象<code>XHR</code> 的<code>withCredentials</code>  属性为<code>true</code> 。</p>
+</li>
+<li><p><strong>Access-Control-Expose-Headers</strong> 表示<code>AJAX</code> 请求可以获取的额外响应头，默认<code>AJAX</code> 只能获取到<code>Cache-Control</code>、<code>Content-Language</code>、<code>Content-Type</code>、<code>Expires</code>、<code>Last-Modified</code>、<code>Pragma</code> 等响应值字段。</p>
+</li>
+</ul>
+<h1 id="Spring-Boot实现跨域请求"><a href="#Spring-Boot实现跨域请求" class="headerlink" title="Spring Boot实现跨域请求"></a>Spring Boot实现跨域请求</h1><h2 id="局部的支持"><a href="#局部的支持" class="headerlink" title="局部的支持"></a>局部的支持</h2><p>在<code>Spring Boot</code> <code>2.0.1</code>版本，<code>Spring MVC</code> 4.2 版本下，可以使用<a href="https://docs.spring.io/spring/docs/5.1.2.RELEASE/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html" target="_blank" rel="external"><code>@CrossOrigin</code></a> 很方便的进行局部的跨域请求配置，例如：</p>
+<pre><code>@Controller
+// @CrossOrigin(origins = &quot;http://127.0.0.1:8080&quot;, maxAge = 3600) Controller 跨域配置
+public class HelloController {
+    @RequestMapping(&quot;/hello&quot;)
+    @ResponseBody
+    @CrossOrigin(&quot;http://127.0.0.1:8080&quot;)  方法跨域配置
+    public String hello( ){
+        return &quot;Hello World&quot;;
+    }
+}
+</code></pre><h2 id="全局的支持"><a href="#全局的支持" class="headerlink" title="全局的支持"></a>全局的支持</h2><p>在<code>Spring Boot</code> <code>2.0.1</code>版本，<code>Spring MVC</code> 4.2 版本下，可以使用可以通过使用自定义的<code>addCorsMappings</code>（<code>CorsRegistry</code>）注册<code>WebMvcConfigurer bean</code>来定义，例如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Configuration</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebConfig</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Bean</span></div><div class="line">    <span class="function"><span class="keyword">public</span> WebMvcConfigurer <span class="title">corsConfigurer</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> WebMvcConfigurer() &#123;</div><div class="line">            <span class="comment">// cors 配置</span></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</div><div class="line">                registry.addMapping(<span class="string">"/**"</span>)</div><div class="line">                        .allowedOrigins(<span class="string">"*"</span>)</div><div class="line">                        .allowCredentials(<span class="keyword">true</span>)</div><div class="line">                        .allowedMethods(<span class="string">"GET"</span>, <span class="string">"POST"</span>, <span class="string">"DELETE"</span>, <span class="string">"PUT"</span>, <span class="string">"OPTIONS"</span>)</div><div class="line">                        .maxAge(<span class="number">3600</span>);</div><div class="line">            &#125;</div><div class="line">         &#125;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>addMapping</code> 用来添加映射的路径，<code>allowedOrigins</code> 用来标注放行的请求域，<code>allowCredentials</code> 表示时候返回允许携带凭证访问，<code>allowedMethods</code> 表示支持的跨域方式，<code>maxAge</code> 表示预检请求的最大缓存时间。</p>
+<h1 id="实际配置中遇到的问题"><a href="#实际配置中遇到的问题" class="headerlink" title="实际配置中遇到的问题"></a>实际配置中遇到的问题</h1><p>在我配置如上的全局支持的<code>CORS</code> 跨域支持后，前台<code>AJAX</code>访问依旧报同源请求限制的错误，所以我直接写了一个<code>html</code> 访问项目的资源，在浏览器看到是可以正常访问服务器资源的，为什么放上服务器的前端代码无法访问项目资源呢？我一度以为自己的设置是失效的，但我把请求访问从服务器访问换到本地访问后发现是可以正常跨域的，我不禁怀疑是不是中间漏掉了什么细节注意到？</p>
+<p>终于，在我四处寻找之下找到了忽略的细节，就是我的请求都是通过<code>Nginx</code> 来进行代理转发的，有没有可能是<code>Nginx</code> 把某个头改写了，导致现有<code>Spring MVC</code> 没有识别当前请求为跨域请求？下面是我的<code>Nginx</code> 的代理配置：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>可以看到是一个很简单的<code>Nginx</code> 代理转发配置，表面上来看没有什么特别的，设置的头似乎没有什么问题，我们可以答应服务器接收到的请求头如下：</p>
+<blockquote>
+<p>——- header ——-<br>headerKey=host;value=193.xxx.xxx.197<br>headerKey=x-real-ip;value=222.xxx.xxx.144<br>headerKey=x-forwarded-for;value=222.xxx.xxx.144<br>headerKey=connection;value=close<br>headerKey=accept;value=application/json, text/plain, <em>/</em><br>headerKey=origin;value=<a href="http://193.xxx.xxx.197" target="_blank" rel="external">http://193.xxx.xxx.197</a><br>headerKey=user-agent;value=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36<br>headerKey=referer;value=<a href="http://193.xxx.xxx.197/" target="_blank" rel="external">http://193.xxx.xxx.197/</a><br>headerKey=accept-encoding;value=gzip, deflate<br>headerKey=accept-language;value=zh-CN,zh;q=0.9</p>
+</blockquote>
+<p>看到这儿可能有读者已经发现问题了，这个是<code>Nginx</code> 为了隐藏自己而做的一般性操作，把 <code>Host</code>请求头改写成对应请求 去掉 <strong>端口</strong>的<code>Host</code> ，这样子会使的正常的请求也能拿到正确的响应，即<code>Nginx</code> 做了同源性适配，否则正常的访问都无法访问了。</p>
+<p>了解到原因后，解决的方法就显而易见了，设置<code>Nginx</code>请求是带上<code>Host</code>的端口，新的配置如下：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>现代<code>Web</code>访问中跨源是很常见的操作，其中一个常用的跨源方式就是<code>CORS</code> 。<code>CORS</code>通过发送的请求头和返回特殊的响应头来控制客户端访问的资源权限，服务器可以自由的选择是否支持<code>CORS</code>访问以及是否允许客户端发送凭证以及设置允许获取的网页。通过<code>CORS</code>来配置跨域请求在现代服务器框架通常都有支持，在<code>Spring MVC</code>可以很方便的使用<code>@CrossOrigin</code> 配置局部跨域以及使用<code>WebMvcConfigurer</code> 配置全局的跨域。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring-Boot/" rel="tag"># Spring Boot</a>
+          
+            <a href="/tags/CORS/" rel="tag"># CORS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/23/Java设计模式设计与实现/" rel="next" title="Java设计模式总结与感想">
+                <i class="fa fa-chevron-left"></i> Java设计模式总结与感想
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+
+    
+      <div id="gitment"></div>
+
+<!-- 主页不要加载gitment -->
+
+<!--  id: '<%= page.title %>' -->
+<script>
+var gitment = new Gitment({
+  id: '1542478747000',
+  owner: 'heshangbuxitou',
+  repo: 'heshangbuxitou.github.io',
+  oauth: {
+    client_id: '14715ee89ca1af10566d',
+    client_secret: '0b809ebdd2c4d75410f4ef8237f0815d0f2b5484',
+  },
+})
+gitment.render('gitment')
+
+</script>
+
+  
+    
+
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/myavatar.gif"
+                alt="SiYuYong" />
+            
+              <p class="site-author-name" itemprop="name">SiYuYong</p>
+              <p class="site-description motion-element" itemprop="description">胡编一通，乱写一气</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/heshangbuxitou" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:siyuyon@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://heyanfu.github.io/" title="何神的博客" target="_blank" rel="external nofollow">何神的博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用的跨域方式-CORS"><span class="nav-number">2.</span> <span class="nav-text">常用的跨域方式-CORS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot实现跨域请求"><span class="nav-number">3.</span> <span class="nav-text">Spring Boot实现跨域请求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#局部的支持"><span class="nav-number">3.1.</span> <span class="nav-text">局部的支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局的支持"><span class="nav-number">3.2.</span> <span class="nav-text">全局的支持</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实际配置中遇到的问题"><span class="nav-number">4.</span> <span class="nav-text">实际配置中遇到的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SiYuYong</span>
+
+  
+</div>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
