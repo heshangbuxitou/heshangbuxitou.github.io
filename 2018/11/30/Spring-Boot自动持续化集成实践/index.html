@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+<!-- 加载gitment的css和js文件 -->
+<link rel="stylesheet" href="/css/gitment.css"> 
+<script src="/js/gitment.js"></script>
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring Boot,Docker,Jenkins,持续化集成," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
+<meta name="keywords" content="Spring Boot,Docker,Jenkins,持续化集成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot自动持续化集成实践">
+<meta property="og:url" content="https://heshangbuxitou.github.io/2018/11/30/Spring-Boot自动持续化集成实践/index.html">
+<meta property="og:site_name" content="SiYuYong&#39;s Blog">
+<meta property="og:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2018/11/30/5c00cacda57f4.jpg">
+<meta property="og:updated_time" content="2018-11-30T07:56:58.982Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot自动持续化集成实践">
+<meta name="twitter:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/30/5c00cacda57f4.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://heshangbuxitou.github.io/2018/11/30/Spring-Boot自动持续化集成实践/"/>
+
+
+
+
+
+<meta name="google-site-verification" content="3CjstPVfqGKNYOswM2Dl407aZWDTievG6ytMf7zpXZI" />
+<meta name="baidu-site-verification" content="KPNc5qApqS" />
+
+  <title>Spring Boot自动持续化集成实践 | SiYuYong's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SiYuYong's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://heshangbuxitou.github.io/2018/11/30/Spring-Boot自动持续化集成实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SiYuYong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/myavatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SiYuYong's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring Boot自动持续化集成实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T11:15:55+08:00">
+                2018-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"
+            ></span> 次</span>
+          
+
+          
+            
+          
+
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有<code>QA</code> 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的<code>Bug</code>需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又繁琐的，手工进行这些流程难保不会错误，我们可以使用自动持续化集成打包来避免这些重复劳动又容易出错的事情。</p>
+<h1 id="项目发布的方式"><a href="#项目发布的方式" class="headerlink" title="项目发布的方式"></a>项目发布的方式</h1><p>通常自动化项目部署的流程是这样：</p>
+<p><img src="https://i.loli.net/2018/11/30/5c00cacda57f4.jpg" alt="jicheng.jpg"></p>
+<p>通过搭建<code>Jenkins</code>构建环境，然后在<code>Github</code>上面注册<code>Jenkins</code>的<code>Hook</code>,每次代码的提交后，<code>Jenkins</code> 会自动拉取最新的代码进行自动化的打包和发布。</p>
+<h1 id="集成构建环境"><a href="#集成构建环境" class="headerlink" title="集成构建环境"></a>集成构建环境</h1><p>首先要做的是搭建一个自动化集成的环境，笔者用的是<code>Ubuntu16</code>  的<code>Linux</code> 系统，其他的系统也可以，建议买一个云上的环境，这样不需要自己维护，还可以<code>24</code>小时不间断进行构建。</p>
+<h2 id="JDK-和Maven的安装"><a href="#JDK-和Maven的安装" class="headerlink" title="JDK 和Maven的安装"></a>JDK 和Maven的安装</h2><h3 id="JDK的安装"><a href="#JDK的安装" class="headerlink" title="JDK的安装"></a>JDK的安装</h3><ol>
+<li>更新软件包列表：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
+<ol>
+<li>安装openjdk-8-jdk：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install openjdk-8-jdk</div></pre></td></tr></table></figure>
+<ol>
+<li>查看<code>Java</code>版本，看看是否安装成功：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -version</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Maven的安装"><a href="#Maven的安装" class="headerlink" title="Maven的安装"></a>Maven的安装</h3><ol>
+<li><p>进入下载列表：<a href="http://www-eu.apache.org/dist/maven/maven-3/" target="_blank" rel="external">http://www-eu.apache.org/dist/maven/maven-3/</a>，根据需要下载指定版本。</p>
+</li>
+<li><p>可以下载<code>3.5</code>以上的版本，例如 <a href="http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz" target="_blank" rel="external">http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz</a> ，直接下载即可</p>
+</li>
+<li><p>解压</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf apache-maven-3.5.4-bin.tar.gz</div></pre></td></tr></table></figure>
+<ol>
+<li>移动</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mv apache-maven-3.5.4 /usr/local/maven3</div></pre></td></tr></table></figure>
+<ol>
+<li>添加环境变量</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">MAVEN_HOME=/usr/local/maven3</div><div class="line">export MAVEN_HOME</div><div class="line">export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</div></pre></td></tr></table></figure>
+<ol>
+<li>查看<code>Maven</code>版本，看看是否安装成功：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">root@VM-0-8-ubuntu:~# mvn -version</div><div class="line">Apache Maven 3.5.4 (1edded0938998edf8bf061f1ceb3cfdeccf443fe; 2018-06-18T02:33:14+08:00)</div><div class="line">Maven home: /usr/local/maven3</div><div class="line">Java version: 1.8.0_181, vendor: Oracle Corporation, runtime: /usr/lib/jvm/java-8-openjdk-amd64/jre</div><div class="line">Default locale: en_US, platform encoding: UTF-8</div><div class="line">OS name: "linux", version: "4.4.0-91-generic", arch: "amd64", family: "unix"</div></pre></td></tr></table></figure>
+<h2 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h2><ol>
+<li>安装<code>Docker</code></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install docker</div></pre></td></tr></table></figure>
+<ol>
+<li>安装<code>Docker-Compose</code></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install docker-compose</div></pre></td></tr></table></figure>
+<ol>
+<li>使用国内的镜像源</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Ubuntu替换国内源：打开/etc/default/docker文件（需要sudo权限），在文件的底部加上一行。</div><div class="line"></div><div class="line">DOCKER_OPTS="--registry-mirror=https://registry.docker-cn.com`</div><div class="line">然后重启Docker</div></pre></td></tr></table></figure>
+<ol>
+<li>重启Docker，查看运行状态</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service restart docker</div><div class="line">service status docker</div></pre></td></tr></table></figure>
+<h2 id="Spring-Boot项目集成Docker-以下示例需要替换成对应的名字"><a href="#Spring-Boot项目集成Docker-以下示例需要替换成对应的名字" class="headerlink" title="Spring Boot项目集成Docker(以下示例需要替换成对应的名字)"></a>Spring Boot项目集成Docker(以下示例需要替换成对应的名字)</h2><ol>
+<li>在<code>pom.xml</code>文件中添加 <code>Docker</code> 镜像名称</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">docker.image.prefix</span>&gt;</span>springboot<span class="tag">&lt;/<span class="name">docker.image.prefix</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div></pre></td></tr></table></figure>
+<ol>
+<li>在插件中添加 <code>Docker</code> 构建插件。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!-- Docker maven plugin --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.spotify<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>docker-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">imageName</span>&gt;</span>$&#123;docker.image.prefix&#125;/$&#123;project.artifactId&#125;<span class="tag">&lt;/<span class="name">imageName</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">dockerDirectory</span>&gt;</span>src/main/docker<span class="tag">&lt;/<span class="name">dockerDirectory</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">resource</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">targetPath</span>&gt;</span>/<span class="tag">&lt;/<span class="name">targetPath</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">directory</span>&gt;</span>$&#123;project.build.directory&#125;<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">include</span>&gt;</span>$&#123;project.build.finalName&#125;.jar<span class="tag">&lt;/<span class="name">include</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">resource</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!-- Docker maven plugin --&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></div></pre></td></tr></table></figure>
+<ol>
+<li>在目录<code>src/main/docker</code>下创建 <code>Dockerfile</code> 文件，<code>Docker</code>会依靠文件构建镜像。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">FROM openjdk:8-jdk-alpine</div><div class="line">VOLUME /tmp</div><div class="line">ADD xxxx-0.0.1-SNAPSHOT.jar app.jar</div><div class="line">ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]</div></pre></td></tr></table></figure>
+<ul>
+<li><p><code>FROM</code> ，表示使用 <code>JDK1.8</code> 环境 为基础镜像，<code>Docker</code> 会自行从仓库拉取基础镜像。</p>
+</li>
+<li><p><code>VOLUME</code> ，<code>VOLUME</code> 指向了一个<code>/tmp</code>的目录，由于 <code>Spring Boot</code> 使用内置的<code>Tomcat</code>容器，<code>Tomcat</code> 默认使用<code>/tmp</code>作为工作目录。这个命令的效果是：在宿主机的<code>/var/lib/docker</code>目录下创建一个临时文件并把它链接到容器中的<code>/tmp</code>目录</p>
+</li>
+<li><p><code>ADD</code> ，拷贝文件并且重命名 。</p>
+<p><strong>注意，这里项目的名字需要和你的项目打包完后的名字一样</strong></p>
+</li>
+<li><p><code>ENTRYPOINT</code> ，镜像运行后执行的<code>shell</code>命令。为了缩短 Tomcat 的启动时间，添加<code>java.security.egd</code>的系统属性指向<code>/dev/urandom</code>。</p>
+</li>
+</ul>
+<ol>
+<li>将项目代码上传到服务器中。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash">打包</span></div><div class="line">mvn package</div><div class="line"><span class="meta">#</span><span class="bash">启动</span></div><div class="line">java -jar target/player-0.0.1-SNAPSHOT.jar</div></pre></td></tr></table></figure>
+<ol>
+<li>启动没问题的话，接下来把项目打包成<code>Docker</code>镜像。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">mvn package docker:build</div><div class="line"><span class="meta">#</span><span class="bash"> 构建成功的话会输出如下日志</span></div><div class="line">Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit/3.2.0.201312181205-r/org.eclipse.jgit-3.2.0.201312181205-r.jar (1.9 MB at 29 kB/s)</div><div class="line">Downloaded from central: https://repo.maven.apache.org/maven2/com/spotify/docker-client/8.7.1/docker-client-8.7.1-shaded.jar (7.4 MB at 83 kB/s)</div><div class="line">[INFO] Using authentication suppliers: [ConfigFileRegistryAuthSupplier]</div><div class="line">[INFO] Copying /work/SiYuYongPlayerAPI/target/player-0.0.1-SNAPSHOT.jar -&gt; /work/SiYuYongPlayerAPI/target/docker/player-0.0.1-SNAPSHOT.jar</div><div class="line">[INFO] Copying src/main/docker/Dockerfile -&gt; /work/SiYuYongPlayerAPI/target/docker/Dockerfile</div><div class="line">[INFO] Building image springboot/player</div><div class="line">Step 1/4 : FROM openjdk:8-jdk-alpine</div><div class="line">Pulling from library/openjdk</div><div class="line">4fe2ade4980c: Pull complete</div><div class="line">6fc58a8d4ae4: Pull complete</div><div class="line">ef87ded15917: Pull complete</div><div class="line">Digest: sha256:b18e45570b6f59bf80c15c78d7f0daff1e18e9c19069c323613297057095fda6</div><div class="line">Status: Downloaded newer image for openjdk:8-jdk-alpine</div><div class="line"><span class="meta"> ---&gt;</span><span class="bash"> 97bc1352afde</span></div><div class="line">Step 2/4 : VOLUME /tmp</div><div class="line"><span class="meta"> ---&gt;</span><span class="bash"> Running <span class="keyword">in</span> 492d1a502cf7</span></div><div class="line"><span class="meta"> ---&gt;</span><span class="bash"> 1e029257761d.</span></div><div class="line">Removing intermediate container 492d1a502cf7</div><div class="line">Step 3/4 : ADD player-0.0.1-SNAPSHOT.jar app.jar</div><div class="line"><span class="meta"> ---&gt;</span><span class="bash"> 4cea2399d2e8</span></div><div class="line">Removing intermediate container 4f3149fdc16b</div><div class="line">Step 4/4 : ENTRYPOINT java -Djava.security.egd=file:/dev/./urandom -jar /app.jar</div><div class="line"><span class="meta"> ---&gt;</span><span class="bash"> Running <span class="keyword">in</span> bb57fa700508</span></div><div class="line"><span class="meta"> ---&gt;</span><span class="bash"> 058028c73f7a</span></div><div class="line"> ...</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 54.346 s</div><div class="line">[INFO] Finished at: 2018-10-26T16:20:15+08:00</div><div class="line">[INFO] Final Memory: 42M/182M</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 可以使用docker images 查看镜像</span></div><div class="line">root@VM-0-8-ubuntu:/work# docker images</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">springboot/xxxx   latest              058028c73f7a        2 weeks ago         121 MB</div></pre></td></tr></table></figure>
+<ol>
+<li>使用Docker-Compose运行Docker，个人比较喜欢用Compose的方式运行Docker，这里可以随意。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">root@VM-0-8-ubuntu:/work# vi docker-compose.yml</div><div class="line">version: "3"</div><div class="line">services:</div><div class="line">  player:</div><div class="line">    image: springboot/player:latest</div><div class="line">    restart: always</div><div class="line">    ports:</div><div class="line">      - 9080:8080</div><div class="line">    container_name: player-container</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 运行</span></div><div class="line">docker-compose -f docker-compose.yml up -d</div><div class="line"><span class="meta">#</span><span class="bash"> 查看docker运行状态</span></div><div class="line">root@VM-0-8-ubuntu:/work# docker ps</div><div class="line">CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">2420556842f1        springboot/xxxx:latest   "java -Djava.secur..."   2 weeks ago         Up 24 hours         0.0.0.0:9080-&gt;8080/tcp   xxxx-container</div><div class="line"><span class="meta">#</span><span class="bash"> 可以看到docker项目已经正确的运行了</span></div></pre></td></tr></table></figure>
+<h2 id="Jenkins-安装"><a href="#Jenkins-安装" class="headerlink" title="Jenkins 安装"></a>Jenkins 安装</h2><p>说实话上面的几步都是很正常的<code>Spring Boot</code>部署以及运行的操作，没有什么难度，下面<code>Jenkins</code> 的安装与整个项目的集成才是重头戏，<code>Jenkins</code>的配置和安装是会坑人的，为什么这么说呢，因为涉及到许多方面的连接，可能有一个地方配置不正确就跑不起来。读者操作一遍就知道了，不要害怕猜坑，猜坑会让你变得更强大哟。我会尽量把整个过程描述的足够细致，减少各位读者踩坑的机率。</p>
+<ol>
+<li>首先下载<code>Jenkins</code>的<code>war</code>包。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> jenkins版本尽量下载最新稳定的版本，不一定需要下载这个版本，因为有的插件可能会需要更高版本的Jenkins来运行</span></div><div class="line">wget http://ftp-nyc.osuosl.org/pub/jenkins/war-stable/2.138.3/jenkins.war</div></pre></td></tr></table></figure>
+<ol>
+<li><p>使用Java运行Jenkins。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar jenkins.war</div></pre></td></tr></table></figure>
+</li>
+<li><p>Jenkins第一次启动需输入管理员帐号<code>admin</code>密码，密码保存位置会有对应提示，也可以通过Jenkins运行时的输出查看。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"></div><div class="line">please use the following password to proceed to installation:</div><div class="line"></div><div class="line">xxxxxxxxxxxxxxxxxxx //密码</div><div class="line"></div><div class="line">...</div></pre></td></tr></table></figure>
+<p>未完待续。。。。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring-Boot/" rel="tag"># Spring Boot</a>
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+            <a href="/tags/持续化集成/" rel="tag"># 持续化集成</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/18/Spring-Boot-CORS实践/" rel="next" title="Spring Boot CORS实践">
+                <i class="fa fa-chevron-left"></i> Spring Boot CORS实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+
+    
+      <div id="gitment"></div>
+
+<!-- 主页不要加载gitment -->
+
+<!--  id: '<%= page.title %>' -->
+<script>
+var gitment = new Gitment({
+  id: '1543547755000',
+  owner: 'heshangbuxitou',
+  repo: 'heshangbuxitou.github.io',
+  oauth: {
+    client_id: '14715ee89ca1af10566d',
+    client_secret: '0b809ebdd2c4d75410f4ef8237f0815d0f2b5484',
+  },
+})
+gitment.render('gitment')
+
+</script>
+
+  
+    
+
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+
+
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/myavatar.gif"
+                alt="SiYuYong" />
+            
+              <p class="site-author-name" itemprop="name">SiYuYong</p>
+              <p class="site-description motion-element" itemprop="description">胡编一通，乱写一气</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/heshangbuxitou" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:siyuyon@163.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://heyanfu.github.io/" title="何神的博客" target="_blank" rel="external nofollow">何神的博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目发布的方式"><span class="nav-number">2.</span> <span class="nav-text">项目发布的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成构建环境"><span class="nav-number">3.</span> <span class="nav-text">集成构建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-和Maven的安装"><span class="nav-number">3.1.</span> <span class="nav-text">JDK 和Maven的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK的安装"><span class="nav-number">3.1.1.</span> <span class="nav-text">JDK的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maven的安装"><span class="nav-number">3.1.2.</span> <span class="nav-text">Maven的安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的安装"><span class="nav-number">3.2.</span> <span class="nav-text">Docker的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot项目集成Docker-以下示例需要替换成对应的名字"><span class="nav-number">3.3.</span> <span class="nav-text">Spring Boot项目集成Docker(以下示例需要替换成对应的名字)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins-安装"><span class="nav-number">3.4.</span> <span class="nav-text">Jenkins 安装</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SiYuYong</span>
+
+  
+</div>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

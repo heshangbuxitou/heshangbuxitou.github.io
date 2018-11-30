@@ -4,6 +4,52 @@
 
     
   <url>
+    <loc>https://heshangbuxitou.github.io/2018/11/30/Spring-Boot%E8%87%AA%E5%8A%A8%E6%8C%81%E7%BB%AD%E5%8C%96%E9%9B%86%E6%88%90%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2018-11-30T07:56:58.982Z</lastmod>
+    <data>
+        <display>
+        <title>Spring Boot自动持续化集成实践</title>
+        <pubTime>2018-11-30T03:15:55.000Z</pubTime>
+        
+        <tag>Spring Boot</tag>
+         
+        <tag>Docker</tag>
+         
+        <tag>Jenkins</tag>
+         
+        <tag>持续化集成</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="https://heshangbuxitou.github.io/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://heshangbuxitou.github.io/2018/09/23/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</loc>
+    <lastmod>2018-11-30T03:16:44.798Z</lastmod>
+    <data>
+        <display>
+        <title>Java设计模式总结与感想</title>
+        <pubTime>2018-09-23T06:45:06.000Z</pubTime>
+        
+        <tag>Design Patterns</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="https://heshangbuxitou.github.io/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://heshangbuxitou.github.io/2018/11/18/Spring-Boot-CORS%E5%AE%9E%E8%B7%B5/</loc>
     <lastmod>2018-11-26T02:03:28.984Z</lastmod>
     <data>
@@ -74,23 +120,6 @@
 
     
   <url>
-    <loc>https://heshangbuxitou.github.io/2018/09/23/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</loc>
-    <lastmod>2018-09-25T03:33:03.489Z</lastmod>
-    <data>
-        <display>
-        <title>Java设计模式总结与感想</title>
-        <pubTime>2018-09-23T06:45:06.000Z</pubTime>
-        
-        <tag>Design Patterns</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://heshangbuxitou.github.io/2017/10/20/seo-practice/</loc>
     <lastmod>2018-09-23T07:01:00.918Z</lastmod>
     <data>
@@ -140,9 +169,9 @@
         <title>Java NIO详解</title>
         <pubTime>2018-01-08T14:06:03.000Z</pubTime>
         
-        <tag>IO</tag>
-         
         <tag>Servlet</tag>
+         
+        <tag>IO</tag>
          
         <tag>异步事件模型</tag>
          
@@ -180,11 +209,11 @@
         <title>Java NIO最终实践之Web服务器</title>
         <pubTime>2018-01-19T08:11:31.000Z</pubTime>
         
-        <tag>Servlet</tag>
-         
         <tag>NIO</tag>
          
         <tag>select</tag>
+         
+        <tag>Servlet</tag>
          
         <tag>Tomcat 5.0</tag>
          

@@ -1,1 +1,1 @@
-https://heshangbuxitou.github.io/2018/11/18/Spring-Boot-CORS实践/
+https://heshangbuxitou.github.io/2018/11/30/Spring-Boot自动持续化集成实践/
