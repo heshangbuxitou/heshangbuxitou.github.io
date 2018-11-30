@@ -109,12 +109,12 @@
 <meta property="og:site_name" content="SiYuYong&#39;s Blog">
 <meta property="og:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://i.loli.net/2018/11/30/5c00cacda57f4.jpg">
-<meta property="og:updated_time" content="2018-11-30T08:06:08.159Z">
+<meta property="og:image" content="https://i.loli.net/2018/11/30/5c00f03020571.png">
+<meta property="og:updated_time" content="2018-11-30T08:10:02.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot自动持续化集成实践">
 <meta name="twitter:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
-<meta name="twitter:image" content="https://i.loli.net/2018/11/30/5c00cacda57f4.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/30/5c00f03020571.png">
 
 
 
@@ -379,7 +379,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有<code>QA</code> 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的<code>Bug</code>需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又繁琐的，手工进行这些流程难保不会错误，我们可以使用自动持续化集成打包来避免这些重复劳动又容易出错的事情。</p>
 <h1 id="项目发布的方式"><a href="#项目发布的方式" class="headerlink" title="项目发布的方式"></a>项目发布的方式</h1><p>通常自动化项目部署的流程是这样：</p>
-<p><img src="https://i.loli.net/2018/11/30/5c00cacda57f4.jpg" alt="jicheng.jpg"></p>
+<p><img src="https://i.loli.net/2018/11/30/5c00f03020571.png" alt="newjicheng.png"></p>
 <p>通过搭建<code>Jenkins</code>构建环境，然后在<code>Github</code>上面注册<code>Jenkins</code>的<code>Hook</code>,每次代码的提交后，<code>Jenkins</code> 会自动拉取最新的代码进行自动化的打包和发布。</p>
 <h1 id="集成构建环境"><a href="#集成构建环境" class="headerlink" title="集成构建环境"></a>集成构建环境</h1><p>首先要做的是搭建一个自动化集成的环境，笔者用的是<code>Ubuntu16</code>  的<code>Linux</code> 系统，其他的系统也可以，建议买一个云上的环境，这样不需要自己维护，还可以<code>24</code>小时不间断进行构建。</p>
 <h2 id="JDK-和Maven的安装"><a href="#JDK-和Maven的安装" class="headerlink" title="JDK 和Maven的安装"></a>JDK 和Maven的安装</h2><h3 id="JDK的安装"><a href="#JDK的安装" class="headerlink" title="JDK的安装"></a>JDK的安装</h3><ol>
