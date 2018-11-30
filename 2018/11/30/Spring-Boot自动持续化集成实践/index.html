@@ -110,7 +110,7 @@
 <meta property="og:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/11/30/5c00f03020571.png">
-<meta property="og:updated_time" content="2018-11-30T08:10:02.442Z">
+<meta property="og:updated_time" content="2018-11-30T08:15:23.198Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot自动持续化集成实践">
 <meta name="twitter:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
@@ -416,21 +416,19 @@
 </ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">root@VM-0-8-ubuntu:~# mvn -version</div><div class="line">Apache Maven 3.5.4 (1edded0938998edf8bf061f1ceb3cfdeccf443fe; 2018-06-18T02:33:14+08:00)</div><div class="line">Maven home: /usr/local/maven3</div><div class="line">Java version: 1.8.0_181, vendor: Oracle Corporation, runtime: /usr/lib/jvm/java-8-openjdk-amd64/jre</div><div class="line">Default locale: en_US, platform encoding: UTF-8</div><div class="line">OS name: "linux", version: "4.4.0-91-generic", arch: "amd64", family: "unix"</div></pre></td></tr></table></figure>
 <h2 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h2><ol>
-<li>安装<code>Docker</code></li>
+<li><p>安装<code>Docker</code></p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install docker</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装<code>Docker-Compose</code></p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install docker-compose</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用国内的镜像源</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Ubuntu替换国内源：打开/etc/default/docker文件（需要sudo权限），在文件的底部加上一行。</div><div class="line"></div><div class="line">DOCKER_OPTS="--registry-mirror=https://registry.docker-cn.com`</div><div class="line">然后重启Docker</div></pre></td></tr></table></figure>
+</li>
+<li><p>重启Docker，查看运行状态</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service restart docker</div><div class="line">service status docker</div></pre></td></tr></table></figure>
+</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install docker</div></pre></td></tr></table></figure>
-<ol>
-<li>安装<code>Docker-Compose</code></li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install docker-compose</div></pre></td></tr></table></figure>
-<ol>
-<li>使用国内的镜像源</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Ubuntu替换国内源：打开/etc/default/docker文件（需要sudo权限），在文件的底部加上一行。</div><div class="line"></div><div class="line">DOCKER_OPTS="--registry-mirror=https://registry.docker-cn.com`</div><div class="line">然后重启Docker</div></pre></td></tr></table></figure>
-<ol>
-<li>重启Docker，查看运行状态</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">service restart docker</div><div class="line">service status docker</div></pre></td></tr></table></figure>
 <h2 id="Spring-Boot项目集成Docker-以下示例需要替换成对应的名字"><a href="#Spring-Boot项目集成Docker-以下示例需要替换成对应的名字" class="headerlink" title="Spring Boot项目集成Docker(以下示例需要替换成对应的名字)"></a>Spring Boot项目集成Docker(以下示例需要替换成对应的名字)</h2><ol>
 <li>在<code>pom.xml</code>文件中添加 <code>Docker</code> 镜像名称</li>
 </ol>
