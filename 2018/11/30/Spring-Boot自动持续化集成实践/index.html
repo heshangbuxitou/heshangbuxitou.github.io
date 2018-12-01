@@ -127,7 +127,9 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2518611-a84115bff915a637.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/953/format/webp">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2518611-e8678da6c93bc25c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
 <meta property="og:image" content="https://i.loli.net/2018/11/30/5c01019a7525f.png">
-<meta property="og:updated_time" content="2018-11-30T09:24:32.510Z">
+<meta property="og:image" content="https://i.loli.net/2018/12/01/5c022322ea87d.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/01/5c022322ea62a.png">
+<meta property="og:updated_time" content="2018-12-01T06:16:30.720Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot自动持续化集成实践">
 <meta name="twitter:description" content="前言通常在开发项目后，我们会运行单元测试检验项目可用性，检查完之后打包交付给测试进行集成测试，可能中间还有QA 等质量检测阶段。在这些阶段中，我们会遇到很多情况，比如，项目中出现的Bug需要修复，有些遗漏的条件判断需要补充，产品经理临时变更需求，以及客户的需求变更等等。碰到上述这些情况，无疑我们需要再次进行开发，开发完成后又是验证，单元测试，打包交付等等一系列操作，可以看到，这些流程是非常长而且又">
@@ -527,7 +529,7 @@
 <p>API URL 输入 <code>https://api.github.com</code>，<code>Credentials</code>点击Add添加，<code>Kind</code>选择<code>Secret Text</code>,具体如下图所示。</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/2518611-547c6e295e263296.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""></p>
 <p>设置完成后，点击<code>TestConnection</code>,提示<code>Credentials verified for user UUserName, rate limit: xxx</code>,则表明有效。</p>
-<h3 id="创建一个freestyle任务"><a href="#创建一个freestyle任务" class="headerlink" title="创建一个freestyle任务"></a>创建一个freestyle任务</h3><ul>
+<h3 id="创建一个自由任务"><a href="#创建一个自由任务" class="headerlink" title="创建一个自由任务"></a>创建一个自由任务</h3><ul>
 <li><p>General 设置<br>填写GitHub project URL, 也就是你的项目主页<br>eg. <code>https://github.com/your_name/your_repo_name</code></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/2518611-7c250beb46759edf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""></p>
 </li>
@@ -547,15 +549,24 @@
 <p><img src="https://upload-images.jianshu.io/upload_images/2518611-9906f0e72e95a468.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""></p>
 <p><strong>构建</strong></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/2518611-a84115bff915a637.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/953/format/webp" alt=""></p>
+<p>在构建的<code>shell</code> 中可以填写你构建所需要的操作，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
 <p><strong>构建后操作</strong> </p>
 <p><img src="https://upload-images.jianshu.io/upload_images/2518611-e8678da6c93bc25c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp" alt=""></p>
 <p>最后点击保存即可。现在你可以尝试<code>push</code>代码到<code>Github</code>了。</p>
 <p><code>push</code> 成功后自动触发构建。</p>
 <p><img src="https://i.loli.net/2018/11/30/5c01019a7525f.png" alt="goujian.png"></p>
+<h1 id="错误邮件配置"><a href="#错误邮件配置" class="headerlink" title="错误邮件配置"></a>错误邮件配置</h1><p>在项目构建错误后，添加构建错误邮件提醒 <strong>(笔者添加的是<code>QQ</code>邮箱的提醒，需要提前进入邮箱中开启<code>POP3</code>和<code>SMTP</code>协议，生成第三方登录的密码)</strong> 。先进入<code>Jenkins</code>中的系统配置中，添加如下配置。</p>
+<p><img src="https://i.loli.net/2018/12/01/5c022322ea87d.png" alt="qqmail.png"></p>
+<p>然后在项目的配置中添加<code>E-mail Notification</code> 构建后操作，如图所示：</p>
+<p><img src="https://i.loli.net/2018/12/01/5c022322ea62a.png" alt="projectmail.png"></p>
+<p>失败后对应的邮箱会收到失败信息的提醒，具体可以到邮箱中查看。到此，关于自动持续化配置方面的东西就结束了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过自动化集成构建的方式，把开发和构建以及测试中重复且容易出错的环节统一起来，它可以让开发不用一直关注代码修改是否影响了现有测试，测试错误的话会通过邮件提醒的方式提醒开发，开发看到错误后可以立即查看是哪个地方出了问题，非常利于检查问题和修复问题，在错误一开始出现的时候就将其解决，减少项目错误排查的成本，有利于项目团队的开发与后期维护。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
 <li><a href="https://juejin.im/post/5abaf987f265da239f076a08" target="_blank" rel="external">简易的微服务持续集成方案</a></li>
 <li><a href="https://www.jianshu.com/p/b2ed4d23a3a9" target="_blank" rel="external">Jenkins+Github持续集成</a></li>
 <li><a href="https://www.jianshu.com/p/22b7860b4e81" target="_blank" rel="external">手把手教你搭建Jenkins+Github持续集成环境</a></li>
+<li><a href="https://www.cnblogs.com/snifferhu/p/3690001.html" target="_blank" rel="external"><a href="https://www.cnblogs.com/snifferhu/p/3690001.html" target="_blank" rel="external">自动化测试概念总结</a></a></li>
 </ul>
 
       
@@ -796,7 +807,7 @@ gitment.render('gitment')
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目发布的方式"><span class="nav-number">2.</span> <span class="nav-text">项目发布的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成构建环境"><span class="nav-number">3.</span> <span class="nav-text">集成构建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-和Maven的安装"><span class="nav-number">3.1.</span> <span class="nav-text">JDK 和Maven的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK的安装"><span class="nav-number">3.1.1.</span> <span class="nav-text">JDK的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maven的安装"><span class="nav-number">3.1.2.</span> <span class="nav-text">Maven的安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的安装"><span class="nav-number">3.2.</span> <span class="nav-text">Docker的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot项目集成Docker-以下示例需要替换成对应的名字"><span class="nav-number">3.3.</span> <span class="nav-text">Spring Boot项目集成Docker(以下示例需要替换成对应的名字)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins-安装"><span class="nav-number">3.4.</span> <span class="nav-text">Jenkins 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github与Jenkins集成"><span class="nav-number">3.5.</span> <span class="nav-text">Github与Jenkins集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sercret-text"><span class="nav-number">3.6.</span> <span class="nav-text">sercret text</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub-webhooks-设置"><span class="nav-number">3.7.</span> <span class="nav-text">GitHub webhooks 设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jenkins的github配置"><span class="nav-number">3.8.</span> <span class="nav-text">jenkins的github配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置GitHub-Plugin"><span class="nav-number">3.8.1.</span> <span class="nav-text">配置GitHub Plugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个freestyle任务"><span class="nav-number">3.8.2.</span> <span class="nav-text">创建一个freestyle任务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目发布的方式"><span class="nav-number">2.</span> <span class="nav-text">项目发布的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成构建环境"><span class="nav-number">3.</span> <span class="nav-text">集成构建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-和Maven的安装"><span class="nav-number">3.1.</span> <span class="nav-text">JDK 和Maven的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK的安装"><span class="nav-number">3.1.1.</span> <span class="nav-text">JDK的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maven的安装"><span class="nav-number">3.1.2.</span> <span class="nav-text">Maven的安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的安装"><span class="nav-number">3.2.</span> <span class="nav-text">Docker的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot项目集成Docker-以下示例需要替换成对应的名字"><span class="nav-number">3.3.</span> <span class="nav-text">Spring Boot项目集成Docker(以下示例需要替换成对应的名字)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins-安装"><span class="nav-number">3.4.</span> <span class="nav-text">Jenkins 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github与Jenkins集成"><span class="nav-number">3.5.</span> <span class="nav-text">Github与Jenkins集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sercret-text"><span class="nav-number">3.6.</span> <span class="nav-text">sercret text</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub-webhooks-设置"><span class="nav-number">3.7.</span> <span class="nav-text">GitHub webhooks 设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jenkins的github配置"><span class="nav-number">3.8.</span> <span class="nav-text">jenkins的github配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置GitHub-Plugin"><span class="nav-number">3.8.1.</span> <span class="nav-text">配置GitHub Plugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个自由任务"><span class="nav-number">3.8.2.</span> <span class="nav-text">创建一个自由任务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误邮件配置"><span class="nav-number">4.</span> <span class="nav-text">错误邮件配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
